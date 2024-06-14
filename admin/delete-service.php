@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 
 // Redirect ke halaman tidak diizinkan jika pengguna bukan admin
 if ($_SESSION['role'] != 'admin') {
-    header("Location: ../home.php");
+    header("Location: ../index.php");
     exit();
 }
 

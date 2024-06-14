@@ -5,7 +5,7 @@ include('config.php');
 // Periksa apakah pengguna sudah login
 if (isset($_SESSION['user_id'])) {
     // Jika sudah, redirect ke halaman home atau halaman lain yang sesuai
-    header("Location: home.php");
+    header("Location: index.php");
     exit();
 }
 

@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 
 // Redirect ke halaman tidak diizinkan jika pengguna bukan admin
 if ($_SESSION['role'] != 'admin') {
-    header("Location: ../home.php");
+    header("Location: ../index.php");
     exit();
 }
 
@@ -22,6 +22,7 @@ $manage_services_class = strpos($current_url, '/project-JWP-2/admin/manage-servi
                          'bg-white text-slate-950' :
                          'text-white hover:bg-white hover:text-slate-950 hover:bg-opacity-70';
 $manage_orders_class = $current_url == '/project-JWP-2/admin/manage-orders.php' ? 'bg-white text-slate-950' : 'text-white hover:bg-white hover:text-slate-950 hover:bg-opacity-70';
+$order_reports_class = $current_url == '/project-JWP-2/admin/order-reports.php' ? 'bg-white text-slate-950' : 'text-white hover:bg-white hover:text-slate-950 hover:bg-opacity-70';
 ?>
 
 <!DOCTYPE html>
@@ -41,6 +42,7 @@ $manage_orders_class = $current_url == '/project-JWP-2/admin/manage-orders.php' 
             <a href="/project-JWP-2/admin/dashboard.php" class="px-6 text-xl py-3 font-bold <?php echo $dashboard_class; ?>">Dashboard</a>
             <a href="/project-JWP-2/admin/manage-services.php" class="px-6 text-xl py-3 font-bold <?php echo $manage_services_class; ?>">Manage Services</a>
             <a href="/project-JWP-2/admin/manage-orders.php" class="px-6 text-xl py-3 font-bold <?php echo $manage_orders_class; ?>">Manage Orders</a>
+            <a href="/project-JWP-2/admin/order-reports.php" class="px-6 text-xl py-3 font-bold <?php echo $order_reports_class; ?>">Order Reports</a>
             <a href="../logout.php" class="px-6 text-xl py-3 font-bold text-white hover:bg-white hover:text-slate-950 hover:bg-opacity-50">Logout</a>
             </div>
         </div>

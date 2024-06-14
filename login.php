@@ -4,7 +4,7 @@ session_start();
 // Periksa apakah pengguna sudah login
 if (isset($_SESSION['user_id'])) {
     // Jika sudah, redirect ke halaman home atau halaman lain yang sesuai
-    header("Location: home.php");
+    header("Location: index.php");
     exit();
 }
 
@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Login Berhasil";
 
             // Redirect ke halaman selanjutnya
-            header("Location: home.php");
+            header("Location: index.php");
             exit();
         } else {
             // Login gagal karena password salah

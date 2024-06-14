@@ -26,8 +26,41 @@ $order_reports_class = $current_url == '/project-JWP-2/admin/order-reports.php' 
 
 include('../config.php');
 
-// Query untuk mendapatkan semua layanan dari database
-$sql = "SELECT * FROM tb_services";
+// Handle status update if form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['order_id']) && isset($_POST['status'])) {
+        $order_id = $_POST['order_id'];
+        $status = $_POST['status'];
+
+        // Update status in database
+        $update_sql = "UPDATE tb_order SET status = '$status' WHERE order_id = '$order_id'";
+
+        if ($conn->query($update_sql) === TRUE) {
+            header("Location: /project-JWP-2/admin/manage-orders.php");
+            exit();
+        } else {
+            echo "Error updating status: " . $conn->error;
+        }
+    }
+}
+
+// Fetch data
+$sql = "SELECT 
+            o.order_id,
+            s.package_name,
+            s.price,
+            u.full_name,
+            u.email,
+            u.phone_number,
+            o.wedding_date,
+            o.status
+        FROM 
+            tb_order o
+        JOIN 
+            tb_services s ON o.service_id = s.service_id
+        JOIN 
+            tb_users u ON o.user_id = u.user_id";
+
 $result = $conn->query($sql);
 
 // Periksa apakah query berhasil
@@ -63,18 +96,18 @@ if ($result === false) {
                 <h1 class="font-bold text-lg py-3 px-6">Hi, Admin</h1>
             </div>
             <div class="flex flex-col gap-1 flex-wrap px-5">
-                <h5 class="font-medium text-lg mb-3">Manage Services</h5>
-                <a href="/project-JWP-2/admin/create-service.php" class="px-4 py-2 bg-green-400 w-fit rounded-md hover:bg-green-600 text-white">Create Service</a>
+                <h5 class="font-medium text-lg mb-3">Manage Orders</h5>
                 <table class="min-w-full border border-collapse">
                     <thead class="bg-slate-300">
                         <tr>
                             <th class="py-2 border">No</th>
-                            <th class="py-2 border">Image</th>
                             <th class="py-2 border">Package Name</th>
-                            <th class="py-2 border">Description</th>
                             <th class="py-2 border">Price</th>
-                            <th class="py-2 border">Status Publish</th>
-                            <th class="py-2 border">Actions</th>
+                            <th class="py-2 border">Name</th>
+                            <th class="py-2 border">Email</th>
+                            <th class="py-2 border">Phone Number </th>
+                            <th class="py-2 border">Wedding Date</th>
+                            <th class="py-2 border">Status</th>
                         </tr>
                     </thead>
                     <tbody class="border border-collapse">
@@ -84,27 +117,29 @@ if ($result === false) {
                                 $index = 0;
                                 ?>
                                 <tr>
-                                    <td class='py-2 border px-2'><?php echo $index+1; ?></td>
-                                    <td class='py-2 border px-2'><img src='../image/<?php echo $row['image']; ?>' alt='<?php echo $row['package_name']; ?>' class='w-16 h-16 object-cover'></td>
-                                    <td class='py-2 border px-2'><?php echo $row['package_name']; ?></td>
-                                    <td class='py-2 border px-2'><?php echo $row['description']; ?></td>
-                                    <td class='py-2 border px-2'>IDR <?php echo $row['price']; ?></td>
-                                    <td class='py-2 border px-2'><?php echo $row['status_publish'] ? 'Published' : 'Unpublished'; ?></td>
-                                    <td class='py-2 px-2 border'>
-                                    <div class='mr-1 mb-1 px-3 py-1 bg-yellow-400 hover:bg-yellow-600 rounded-md text-white w-fit'>
-
-                                        <a href='edit-service.php?id=<?php echo $row['service_id']; ?>' >Edit</a>
-                                    </div>    
-                                    <div class='text-white w-fit bg-red-400 hover:bg-red-600 px-3 py-1 rounded-md'  onclick='return confirm("Are you sure you want to delete this service?")'>    
-                                        <a href='delete-service.php?id=<?php echo $row['service_id']; ?>' >Delete</a>
-                                    </div>    
+                                    <td class='py-2 border px-2 text-center'><?php echo $index+1; ?></td>
+                                    <td class='py-2 border px-2 text-center'><?php echo htmlspecialchars($row["package_name"]) ?></td>
+                                    <td class="py-2 border px-2 text-center">IDR <?php echo number_format($row["price"], 0, ',', '.') ?></td>
+                                    <td class="py-2 border px-2 text-center"><?php echo htmlspecialchars($row["full_name"]) ?></td>
+                                    <td class="py-2 border px-2 text-center"><?php echo htmlspecialchars($row["email"]) ?></td>
+                                    <td class="py-2 border px-2 text-center"><?php echo htmlspecialchars($row["phone_number"]) ?></td>
+                                    <td class="py-2 border px-2 text-center"><?php echo date('d F Y', strtotime($row["wedding_date"])); ?></td>
+                                    <td class="py-2 border px-2 text-center">
+                                    <form method="post">
+                                    <input type="hidden" name="order_id" value="<?php echo $row["order_id"]; ?>">
+                                        <select name="status" onchange="this.form.submit()" class="px-2 py-1 rounded-md">
+                                            <option value="requested" <?php echo ($row["status"] == "requested" ? 'selected' : ''); ?> >Requested</option>
+                                            <option value="approved" <?php echo ($row["status"] == "approved" ? 'selected' : ''); ?> >Approved</option>
+                                            <option value="cancelled" <?php echo ($row["status"] == "cancelled" ? 'selected' : ''); ?> >Cancelled</option>
+                                        </select>
+                                     </form>
                                     </td>
                                 </tr>
                                 <?php
                             }
                         } else {
                             // Tampilkan pesan jika tidak ada layanan yang ditemukan
-                            echo "<tr><td colspan='7' class='text-center py-2'>No services found</td></tr>";
+                            echo "<tr><td colspan='7' class='text-center py-2'>No orders found</td></tr>";
                         }
                         ?>
                     </tbody>
