@@ -1,6 +1,5 @@
 <?php
 session_start();
-// Redirect ke halaman login jika pengguna belum login
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../login.php");
     exit();
@@ -8,7 +7,6 @@ if (!isset($_SESSION['user_id'])) {
 
 include('./config.php');
 
-// Query untuk mendapatkan data pesanan berdasarkan user_id
 $user_id = $_SESSION['user_id'];
 $sql = "SELECT o.*, s.package_name, s.price 
         FROM tb_order o
@@ -19,7 +17,6 @@ $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Periksa jika query berhasil dieksekusi
 if (!$result) {
     echo "Error: " . $conn->error;
     exit();
@@ -38,14 +35,12 @@ if (!$result) {
     <div class="w-full flex items-center px-10 py-3 bg-white border-b shadow-md fixed z-10">
         <a href="index.php" class="font-bold text-3xl text-[#B3E2A7]">JeWePe</a>
 
-         <!-- Tautan Logout jika pengguna sudah login -->
          <?php if (isset($_SESSION['user_id'])): ?>
             <div class="ml-auto flex gap-5">
                 <a href="history.php" class="text-slate-400 hover:text-[#B3E2A7] font-semibold text-lg">History</a>
                 <a href="logout.php" class="text-slate-400 hover:text-[#B3E2A7] font-semibold text-lg">Logout</a>
             </div>
         <?php else: ?>
-        <!-- Tautan Login jika pengguna belum login -->
             <div class="ml-auto">
                 <a href="login.php" class="text-slate-400 hover:text-[#B3E2A7] font-semibold text-lg">Login</a>
             </div>
@@ -66,15 +61,18 @@ if (!$result) {
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
             <?php
-                $index = 0; // Initialize index outside the loop
+                $index = 0;
                 while ($row = $result->fetch_assoc()) {
-                    $index++; // Increment index for each row
+                    $index++; 
                     echo "<tr>";
                     echo "<td class='px-6 py-4 whitespace-nowrap'>" . $index . "</td>";
                     echo "<td class='px-6 py-4 whitespace-nowrap'>" . htmlspecialchars($row['package_name']) . "</td>";
                     echo "<td class='px-6 py-4 whitespace-nowrap'>IDR " . number_format($row['price'], 0, ',', '.') . "</td>";
                     echo "<td class='px-6 py-4 whitespace-nowrap'>" . date('d F Y', strtotime($row["wedding_date"])) . "</td>";
-                    echo "<td class='px-6 py-4 whitespace-nowrap font-medium " . ($row['status'] === "requested" ? "text-red-500" : "text-green-500") . "'>" . htmlspecialchars($row['status']) . "</td>";
+                    echo "<td class='px-6 py-4 whitespace-nowrap font-medium " . 
+                    ($row['status'] === "requested" ? "text-red-500" : 
+                    ($row['status'] === "approved" ? "text-green-500" : "text-slate-400")) . 
+                    "'>" . htmlspecialchars($row['status']) . "</td>";
 
                     echo "</tr>";
                 }

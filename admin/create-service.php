@@ -15,14 +15,14 @@ if ($_SESSION['role'] != 'admin') {
 
 $current_url = $_SERVER['REQUEST_URI'];
 
-$dashboard_class = $current_url == '/project-JWP-2/admin/dashboard.php' ? 'bg-white' : 'text-white hover:bg-white hover:text-slate-950 hover:bg-opacity-70';
-$manage_services_class = strpos($current_url, '/project-JWP-2/admin/manage-services.php') !== false ||
-                         strpos($current_url, '/project-JWP-2/admin/create-service.php') !== false ||
-                         strpos($current_url, '/project-JWP-2/admin/edit-service.php') !== false ?
+$dashboard_class = $current_url == '/arfindwio/admin/dashboard.php' ? 'bg-white' : 'text-white hover:bg-white hover:text-slate-950 hover:bg-opacity-70';
+$manage_services_class = strpos($current_url, '/arfindwio/admin/manage-services.php') !== false ||
+                         strpos($current_url, '/arfindwio/admin/create-service.php') !== false ||
+                         strpos($current_url, '/arfindwio/admin/edit-service.php') !== false ?
                          'bg-white text-slate-950' :
                          'text-white hover:bg-white hover:text-slate-950 hover:bg-opacity-70';
-$manage_orders_class = $current_url == '/project-JWP-2/admin/manage-orders.php' ? 'bg-white text-slate-950' : 'text-white hover:bg-white hover:text-slate-950 hover:bg-opacity-70';
-$order_reports_class = $current_url == '/project-JWP-2/admin/order-reports.php' ? 'bg-white text-slate-950' : 'text-white hover:bg-white hover:text-slate-950 hover:bg-opacity-70';
+$manage_orders_class = $current_url == '/arfindwio/admin/manage-orders.php' ? 'bg-white text-slate-950' : 'text-white hover:bg-white hover:text-slate-950 hover:bg-opacity-70';
+$order_reports_class = $current_url == '/arfindwio/admin/order-reports.php' ? 'bg-white text-slate-950' : 'text-white hover:bg-white hover:text-slate-950 hover:bg-opacity-70';
 
 // Include file konfigurasi database
 include("../config.php");
@@ -107,10 +107,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="w-[22%] flex flex-col bg-[#6295A2] text-white h-screen">
             <h1 class="text-3xl font-bold text-center pt-8">JeWePe</h1>
             <div class="pt-4 flex flex-col">
-            <a href="/project-JWP-2/admin/dashboard.php" class="px-6 text-xl py-3 font-bold <?php echo $dashboard_class; ?>">Dashboard</a>
-            <a href="/project-JWP-2/admin/manage-services.php" class="px-6 text-xl py-3 font-bold <?php echo $manage_services_class; ?>">Manage Services</a>
-            <a href="/project-JWP-2/admin/manage-orders.php" class="px-6 text-xl py-3 font-bold <?php echo $manage_orders_class; ?>">Manage Orders</a>
-            <a href="/project-JWP-2/admin/order-reports.php" class="px-6 text-xl py-3 font-bold <?php echo $order_reports_class; ?>">Order Reports</a>
+            <a href="/arfindwio/admin/dashboard.php" class="px-6 text-xl py-3 font-bold <?php echo $dashboard_class; ?>">Dashboard</a>
+            <a href="/arfindwio/admin/manage-services.php" class="px-6 text-xl py-3 font-bold <?php echo $manage_services_class; ?>">Manage Services</a>
+            <a href="/arfindwio/admin/manage-orders.php" class="px-6 text-xl py-3 font-bold <?php echo $manage_orders_class; ?>">Manage Orders</a>
+            <a href="/arfindwio/admin/order-reports.php" class="px-6 text-xl py-3 font-bold <?php echo $order_reports_class; ?>">Order Reports</a>
             <a href="../logout.php" class="px-6 text-xl py-3 font-bold text-white hover:bg-white hover:text-slate-950 hover:bg-opacity-50">Logout</a>
             </div>
         </div>
@@ -147,7 +147,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </select>
                 </div>
                 <div class="flex gap-2 pt-3">
-                    <a href="/project-JWP-2/admin/manage-services.php" class="border px-3 py-1 bg-slate-200 border-slate-300 rounded-md">Cancel</a>
+                    <a href="/arfindwio/admin/manage-services.php" class="border px-3 py-1 bg-slate-200 border-slate-300 rounded-md">Cancel</a>
                     <input type="submit" value="Create" class="w-fit bg-blue-400 text-white px-3 py-1 rounded-md hover:bg-blue-600">
                 </div>
             </form>
